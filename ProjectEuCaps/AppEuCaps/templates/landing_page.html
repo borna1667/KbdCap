@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EuCaps – Premium Mechanical Keyboard Accessories</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'eucaps-blue': '#1a56db',
+            'eucaps-dark': '#111827',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+        }
+      }
+    }
+    
+    // Function to handle form submission
+    function submitForm(formId) {
+      const form = document.getElementById(formId);
+      const email = form.querySelector('input[type="email"]').value;
+      const statusEl = document.getElementById(formId + '-status');
+      
+      // Simple email validation
+      if (!email || !email.includes('@') || !email.includes('.')) {
+        statusEl.textContent = 'Please enter a valid email address';
+        statusEl.className = 'text-red-500 text-sm mt-2';
+        return false;
+      }
+      
+      // In a real implementation, this would be an AJAX request to your server
+      // For demo purposes, we'll simulate a successful submission
+      
+      // Show loading state
+      statusEl.textContent = 'Submitting...';
+      statusEl.className = 'text-gray-300 text-sm mt-2 animate-pulse';
+      
+      setTimeout(() => {
+        // Add to localStorage to simulate database storage
+        const subscribers = JSON.parse(localStorage.getItem('eucaps_subscribers') || '[]');
+        if (!subscribers.includes(email)) {
+          subscribers.push(email);
+          localStorage.setItem('eucaps_subscribers', JSON.stringify(subscribers));
+          
+          // Update the subscriber count on the page
+          updateSubscriberCount();
+          
+          // Success message
+          statusEl.textContent = 'Thanks for subscribing! Check your email for confirmation.';
+          statusEl.className = 'text-green-300 text-sm mt-2';
+          form.reset();
+        } else {
+          statusEl.textContent = 'This email is already subscribed!';
+          statusEl.className = 'text-yellow-300 text-sm mt-2';
+        }
+      }, 800);
+      
+      return false;
+    }
+    
+    // Function to update subscriber count
+    function updateSubscriberCount() {
+      const subscribers = JSON.parse(localStorage.getItem('eucaps_subscribers') || '[]');
+      const baseCount = 170; // Starting number
+      const totalCount = baseCount + subscribers.length;
+      
+      // Update all counter elements
+      document.querySelectorAll('.subscriber-count').forEach(el => {
+        el.textContent = totalCount;
+      });
+      
+      // Update admin table if it exists
+      const adminTable = document.getElementById('admin-subscribers-table');
+      if (adminTable) {
+        const tbody = adminTable.querySelector('tbody');
+        tbody.innerHTML = '';
+        
+        subscribers.forEach((email, index) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td class="px-4 py-2 border-b border-gray-200">${index + 1}</td>
+            <td class="px-4 py-2 border-b border-gray-200">${email}</td>
+            <td class="px-4 py-2 border-b border-gray-200">${new Date().toLocaleDateString()}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+    }
+    
+    // Function to toggle admin panel
+    function toggleAdminPanel() {
+      const adminPanel = document.getElementById('admin-panel');
+      if (adminPanel.classList.contains('hidden')) {
+        // Set password check
+        const password = prompt('Enter admin password:');
+        if (password === 'admin123') { // In real implementation, use proper authentication
+          adminPanel.classList.remove('hidden');
+        }
+      } else {
+        adminPanel.classList.add('hidden');
+      }
+    }
+    
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      updateSubscriberCount();
+    });
+  </script>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased font-sans">
+  <!-- Navigation -->
+  <nav class="bg-white shadow-sm fixed w-full z-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <div class="flex-shrink-0 flex items-center">
+            <span class="text-eucaps-blue font-bold text-xl">EuCaps</span>
+          </div>
+        </div>
+        <div class="hidden md:flex items-center space-x-4">
+          <a href="#features" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-eucaps-blue">Features</a>
+          <a href="#products" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-eucaps-blue">Products</a>
+          <a href="#faq" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-eucaps-blue">FAQ</a>
+          <a href="#waitlist" class="ml-4 px-4 py-2 text-sm font-medium text-white bg-eucaps-blue rounded-md hover:bg-blue-700">Join Waitlist</a>
+        </div>
+        <div class="flex items-center md:hidden">
+          <button type="button" class="p-2 rounded-md text-gray-700 hover:text-eucaps-blue focus:outline-none">
+            <i class="fas fa-bars text-lg"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="waitlist" class="relative bg-cover bg-center pt-16 h-screen flex items-center" style="background-image: url('hero.jpg');">
+    <div class="absolute inset-0 bg-black opacity-50"></div>
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center h-full text-center space-y-8">
+      <div class="text-white font-bold text-4xl md:text-6xl animate-fade-in">EuCaps</div>
+      <h1 class="text-4xl md:text-6xl font-extrabold text-white leading-tight">
+        Elevate Your <span class="text-blue-400">Typing Experience</span>
+      </h1>
+      <p class="max-w-2xl text-lg md:text-xl text-gray-200 leading-relaxed">
+        Premium & budget-friendly keycaps and keyboards designed specifically for European enthusiasts. 
+        No more import fees, long shipping times, or poor layouts.
+      </p>
+      <form id="hero-form" onsubmit="return submitForm('hero-form')" class="w-full max-w-md">
+        <div class="flex flex-col sm:flex-row shadow-lg">
+          <input
+            type="email"
+            name="email"
+            required
+            placeholder="Enter your email"
+            class="flex-grow px-4 py-3 rounded-l-lg sm:rounded-r-none rounded-r-lg sm:rounded-b-none rounded-b-none focus:outline-none focus:ring-2 focus:ring-eucaps-blue"
+          >
+          <button
+            type="submit"
+            class="px-6 py-3 bg-eucaps-blue hover:bg-blue-700 text-white font-semibold rounded-r-lg sm:rounded-l-none rounded-l-lg sm:rounded-t-none rounded-t-none transition duration-200"
+          >
+            Join Waitlist
+          </button>
+        </div>
+        <p id="hero-form-status" class="text-gray-300 text-sm mt-2">No spam. Early access to products. Unsubscribe anytime.</p>
+      </form>
+      <div class="pt-8">
+        <p class="text-white text-sm">Join <span class="subscriber-count font-semibold">170</span>+ enthusiasts on our waitlist</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">Why Choose EuCaps?</h2>
+        <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
+          We're building what European keyboard enthusiasts have been waiting for.
+        </p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+        <div class="p-6 border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition duration-300">
+          <div class="w-12 h-12 mx-auto flex items-center justify-center rounded-full bg-blue-100 text-eucaps-blue mb-5">
+            <i class="fas fa-euro-sign text-xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">Budget-Friendly</h3>
+          <p class="text-gray-600">Starter sets under €30, mid-range at €50-80, and premium options for the enthusiasts. Something for every budget.</p>
+        </div>
+        <div class="p-6 border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition duration-300">
+          <div class="w-12 h-12 mx-auto flex items-center justify-center rounded-full bg-blue-100 text-eucaps-blue mb-5">
+            <i class="fas fa-medal text-xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">Premium Quality</h3>
+          <p class="text-gray-600">Double-shot PBT, dye-sublimation, and premium ABS options. ISO-layouts and all European language support included.</p>
+        </div>
+        <div class="p-6 border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition duration-300">
+          <div class="w-12 h-12 mx-auto flex items-center justify-center rounded-full bg-blue-100 text-eucaps-blue mb-5">
+            <i class="fas fa-truck-fast text-xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">EU-Wide Shipping</h3>
+          <p class="text-gray-600">2-5 day shipping to all EU countries. No customs fees, no import duties, no surprises at delivery.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Showcase -->
+  <section id="products" class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">Coming Soon</h2>
+        <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
+          Our first product lineup will include these exciting options
+        </p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition duration-300">
+          <div class="h-48 bg-gradient-to-r from-blue-200 to-blue-400 flex items-center justify-center">
+            <span class="text-white text-lg font-semibold">Nordic Frost</span>
+          </div>
+          <div class="p-6">
+            <h3 class="font-semibold text-lg mb-2">EuCaps Nordic Frost</h3>
+            <p class="text-gray-600 text-sm mb-4">PBT keycaps with Nordic legends, blue and white colorway</p>
+            <div class="flex justify-between items-center">
+              <span class="text-eucaps-blue font-bold">€49.99</span>
+              <span class="text-xs text-gray-500">Coming May 2025</span>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition duration-300">
+          <div class="h-48 bg-gradient-to-r from-green-200 to-green-400 flex items-center justify-center">
+            <span class="text-white text-lg font-semibold">Olive Garden</span>
+          </div>
+          <div class="p-6">
+            <h3 class="font-semibold text-lg mb-2">EuCaps Olive Garden</h3>
+            <p class="text-gray-600 text-sm mb-4">Double-shot PBT with olive green and beige colorway</p>
+            <div class="flex justify-between items-center">
+              <span class="text-eucaps-blue font-bold">€59.99</span>
+              <span class="text-xs text-gray-500">Coming May 2025</span>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition duration-300">
+          <div class="h-48 bg-gradient-to-r from-purple-200 to-purple-400 flex items-center justify-center">
+            <span class="text-white text-lg font-semibold">Royal Purple</span>
+          </div>
+          <div class="p-6">
+            <h3 class="font-semibold text-lg mb-2">EuCaps Royal Purple</h3>
+            <p class="text-gray-600 text-sm mb-4">ABS keycaps with purple and gold accent colorway</p>
+            <div class="flex justify-between items-center">
+              <span class="text-eucaps-blue font-bold">€39.99</span>
+              <span class="text-xs text-gray-500">Coming June 2025</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-12">
+        <a href="#waitlist" class="inline-block bg-eucaps-blue text-white font-medium py-3 px-6 rounded-md hover:bg-blue-700 transition duration-300">Get Early Access</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section id="faq" class="py-20 bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">Frequently Asked Questions</h2>
+      </div>
+      <div class="space-y-8">
+        <div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">When will products be available?</h3>
+          <p class="text-gray-600">Our first keycap sets are planned for release in May 2025. Waitlist members will get early access and special pricing.</p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">Which layouts will be supported?</h3>
+          <p class="text-gray-600">All our keycap sets will include ANSI and ISO layouts, with support for UK, German, French, Nordic, Spanish, and Italian legends.</p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">Where are products shipped from?</h3>
+          <p class="text-gray-600">All products ship from our warehouse in the Netherlands, ensuring fast delivery throughout the EU without customs fees.</p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">What's the benefit of joining the waitlist?</h3>
+          <p class="text-gray-600">Waitlist members get early access to products, exclusive discounts, and influence on our future designs through community votes.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="py-16 bg-eucaps-dark text-white">
+    <div class="max-w-5xl mx-auto px-4 text-center">
+      <h2 class="text-3xl font-bold mb-6">Ready to elevate your typing experience?</h2>
+      <p class="max-w-2xl mx-auto mb-8 text-gray-300">
+        Join our growing community of <span class="subscriber-count font-semibold">170</span>+ European mechanical keyboard enthusiasts. Be the first to know when our products launch.
+      </p>
+      <form id="footer-form" onsubmit="return submitForm('footer-form')" class="w-full max-w-md mx-auto">
+        <div class="flex flex-col sm:flex-row">
+          <input
+            type="email"
+            name="email"
+            required
+            placeholder="Enter your email"
+            class="flex-grow px-4 py-3 rounded-l-lg sm:rounded-r-none rounded-r-lg sm:rounded-b-none rounded-b-none focus:outline-none text-gray-800"
+          >
+          <button
+            type="submit"
+            class="px-6 py-3 bg-eucaps-blue hover:bg-blue-700 text-white font-semibold rounded-r-lg sm:rounded-l-none rounded-l-lg sm:rounded-t-none rounded-t-none transition duration-200"
+          >
+            Join Waitlist
+          </button>
+        </div>
+        <p id="footer-form-status" class="text-gray-300 text-sm mt-2"></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-gray-400 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+          <h3 class="text-white font-bold text-xl mb-4">EuCaps</h3>
+          <p class="text-sm">Premium mechanical keyboard accessories for European enthusiasts.</p>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-4">Products</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#" class="hover:text-white">Keycaps</a></li>
+            <li><a href="#" class="hover:text-white">Keyboards</a></li>
+            <li><a href="#" class="hover:text-white">Accessories</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-4">Support</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#" class="hover:text-white">FAQs</a></li>
+            <li><a href="#" class="hover:text-white">Contact</a></li>
+            <li><a href="#" class="hover:text-white">Returns</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-4">Connect</h4>
+          <div class="flex space-x-4">
+            <a href="#" class="text-gray-400 hover:text-white">
+              <i class="fab fa-instagram text-xl"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white">
+              <i class="fab fa-twitter text-xl"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white">
+              <i class="fab fa-discord text-xl"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white">
+              <i class="fab fa-reddit text-xl"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+        <p class="text-sm">&copy; 2025 EuCaps. All rights reserved.</p>
+        <div class="space-x-4 mt-4 md:mt-0">
+          <a href="#" class="hover:text-white text-sm">Privacy Policy</a>
+          <a href="#" class="hover:text-white text-sm">Terms of Service</a>
+          <a href="#" class="hover:text-white text-sm">Shipping Policy</a>
+          <a href="#" onclick="toggleAdminPanel(); return false;" class="hover:text-white text-sm">Admin</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  
+  <!-- Admin Panel - Hidden by default -->
+  <div id="admin-panel" class="fixed inset-0 bg-gray-900 bg-opacity-90 z-50 flex items-center justify-center hidden">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-screen overflow-auto p-6">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-900">Subscriber Management</h2>
+        <button onclick="toggleAdminPanel()" class="text-gray-500 hover:text-gray-700">
+          <i class="fas fa-times text-xl"></i>
+        </button>
+      </div>
+      
+      <div class="mb-6">
+        <h3 class="text-lg font-semibold mb-2">Subscriber Statistics</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="bg-blue-50 p-4 rounded-lg">
+            <p class="text-sm text-gray-600">Total Subscribers</p>
+            <p class="text-2xl font-bold text-eucaps-blue subscriber-count">170</p>
+          </div>
+          <div class="bg-green-50 p-4 rounded-lg">
+            <p class="text-sm text-gray-600">New Today</p>
+            <p class="text-2xl font-bold text-green-600">0</p>
+          </div>
+          <div class="bg-purple-50 p-4 rounded-lg">
+            <p class="text-sm text-gray-600">Conversion Rate</p>
+            <p class="text-2xl font-bold text-purple-600">5.2%</p>
+          </div>
+        </div>
+      </div>
+      
+      <div>
+        <h3 class="text-lg font-semibold mb-2">Recent Subscribers</h3>
+        <div class="overflow-x-auto">
+          <table id="admin-subscribers-table" class="min-w-full bg-white">
+            <thead>
+              <tr>
+                <th class="px-4 py-2 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">#</th>
+                <th class="px-4 py-2 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Email</th>
+                <th class="px-4 py-2 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date Joined</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- This will be populated via JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div class="mt-6 flex justify-end">
+        <button onclick="toggleAdminPanel()" class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">Close</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
