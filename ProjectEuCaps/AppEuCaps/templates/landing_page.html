@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -140,14 +141,14 @@
   </nav>
 
   <!-- Hero Section -->
-  <section id="waitlist" class="relative bg-cover bg-center pt-16 h-screen flex items-center" style="background-image: url('hero.jpg');">
-    <div class="absolute inset-0 bg-black opacity-50"></div>
+  <section id="waitlist" class="relative bg-cover bg-center pt-16 h-screen flex items-center" style="background-image: url('{% static 'images/hero.jpg' %}');">
+    <div class="absolute inset-0 bg-black opacity-20"></div>
     <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center h-full text-center space-y-8">
-      <div class="text-white font-bold text-4xl md:text-6xl animate-fade-in">EuCaps</div>
-      <h1 class="text-4xl md:text-6xl font-extrabold text-white leading-tight">
-        Elevate Your <span class="text-blue-400">Typing Experience</span>
+      <div class="text-black font-bold text-4xl md:text-6xl animate-fade-in">EuCaps</div>
+      <h1 class="text-4xl md:text-6xl font-extrabold text-black leading-tight">
+        Elevate Your <span class="text-eucaps-blue">Typing Experience</span>
       </h1>
-      <p class="max-w-2xl text-lg md:text-xl text-gray-200 leading-relaxed">
+      <p class="max-w-2xl text-lg md:text-xl text-black leading-relaxed">
         Premium & budget-friendly keycaps and keyboards designed specifically for European enthusiasts. 
         No more import fees, long shipping times, or poor layouts.
       </p>
@@ -167,10 +168,10 @@
             Join Waitlist
           </button>
         </div>
-        <p id="hero-form-status" class="text-gray-300 text-sm mt-2">No spam. Early access to products. Unsubscribe anytime.</p>
+        <p id="hero-form-status" class="text-black text-sm mt-2">No spam. Early access to products. Unsubscribe anytime.</p>
       </form>
       <div class="pt-8">
-        <p class="text-white text-sm">Join <span class="subscriber-count font-semibold">170</span>+ enthusiasts on our waitlist</p>
+        <p class="text-black text-sm">Join <span class="subscriber-count font-semibold">170</span>+ enthusiasts on our waitlist</p>
       </div>
     </div>
   </section>
@@ -179,8 +180,8 @@
   <section id="features" class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-16">
-        <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">Why Choose EuCaps?</h2>
-        <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
+        <h2 class="text-3xl font-extrabold text-black sm:text-4xl">Why Choose EuCaps?</h2>
+        <p class="mt-4 max-w-2xl mx-auto text-xl text-black">
           We're building what European keyboard enthusiasts have been waiting for.
         </p>
       </div>
